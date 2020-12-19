@@ -19,7 +19,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     paddingVertical: 12,
-    paddingHorizontal: '10%',
   },
 });
 

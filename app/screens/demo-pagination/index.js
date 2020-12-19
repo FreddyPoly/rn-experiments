@@ -3,6 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import Pagination1 from './components/pagination-1';
+import Pagination2 from './pagination-2/pagination-2';
 
 const DemoPagination = () => {
   const [activePage, setActivePage] = useState(2);
@@ -43,6 +44,10 @@ const DemoPagination = () => {
       <View style={styles.paginationsContainer}>
         <Pagination1 activePage={activePage} pages={pages} />
       </View>
+
+      <View style={styles.paginationsContainer}>
+        <Pagination2 activePage={activePage} pages={pages} />
+      </View>
     </View>
   );
 };
@@ -70,6 +75,7 @@ const styles = StyleSheet.create({
   },
   paginationsContainer: {
     paddingTop: '10%',
+    paddingHorizontal: '10%',
   },
 });
 

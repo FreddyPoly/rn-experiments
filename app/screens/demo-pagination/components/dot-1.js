@@ -7,8 +7,8 @@ const Dot1 = ({ active }) => {
   useEffect(() => {
     Animated.timing(dotSize, {
       toValue: active ? 2 : 1,
-      duration: 150,
-      Easing: Easing.in,
+      duration: 250,
+      Easing: Easing.bezier(.32,-0.16,.41,.17),
       useNativeDriver: true,
     }).start();
   }, [active]);
