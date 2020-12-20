@@ -34,7 +34,7 @@ const Pagination2 = ({ activePage, pages }) => {
 
       <View style={styles.dotsContainer}>
         {pages.map((_, index) => (
-          <Dot2 key={index} />
+          <Dot2 key={index} active={index === activePage} />
         ))}
       </View>
     </View>

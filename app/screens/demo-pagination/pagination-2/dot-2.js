@@ -1,9 +1,20 @@
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import { Animated, StyleSheet, Easing } from 'react-native';
 
-const Dot2 = () => {
+const Dot2 = ({ active }) => {
+  const dotSize = useRef(new Animated.Value(16)).current;
+
+  useEffect(() => {
+    Animated.timing(dotSize, {
+      toValue: active ? 0 : 1,
+      duration: 250,
+      Easing: Easing.bezier(.32,-0.16,.41,.17),
+      useNativeDriver: true,
+    }).start();
+  }, [active]);
+
   return (
-    <View style={styles.dot} />
+    <Animated.View style={[styles.dot, { transform: [{ scaleX: dotSize }, { scaleY: dotSize }] }]} />
   );
 };
 
