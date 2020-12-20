@@ -19,20 +19,19 @@ const Pagination4 = ({ activePage, pages }) => {
       Animated.timing(leftOffset, {
         toValue: getOffset(),
         duration: ANIMATION_TIME,
-        Easing: Easing.bezier(.32,-0.16,.41,.17),
+        easing: Easing.bezier(0.5, 0, 0.75, 0),
         useNativeDriver: true,
       }),
       Animated.sequence([
+        Animated.delay(ANIMATION_TIME / 6),
         Animated.timing(indicatorWidth, {
-          toValue: 1.75,
+          toValue: 1.5,
           duration: ANIMATION_TIME / 2,
-          Easing: Easing.bezier(.32,-0.16,.41,.17),
           useNativeDriver: true,
         }),
         Animated.timing(indicatorWidth, {
           toValue: 1,
           duration: ANIMATION_TIME / 2,
-          Easing: Easing.bezier(.32,-0.16,.41,.17),
           useNativeDriver: true,
         })
       ]),

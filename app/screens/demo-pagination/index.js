@@ -8,7 +8,7 @@ import Pagination3 from './pagination-3/pagination-3';
 import Pagination4 from './pagination-4/pagination-4';
 
 export const DOT_SIZE = 25;
-export const ANIMATION_TIME = 300;
+export const ANIMATION_TIME = 500;
 
 const DemoPagination = () => {
   const [activePage, setActivePage] = useState(2);
