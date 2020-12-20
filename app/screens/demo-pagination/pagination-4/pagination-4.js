@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { View, Animated, StyleSheet, Easing } from 'react-native';
 
-import { DOT_SIZE, ANIMATION_TIME } from '../index';
+import { variables } from '../variables';
 
 import Dot4 from './dot-4';
 
@@ -18,20 +18,20 @@ const Pagination4 = ({ activePage, pages }) => {
     Animated.parallel([
       Animated.timing(leftOffset, {
         toValue: getOffset(),
-        duration: ANIMATION_TIME,
+        duration: variables.ANIMATION_TIME,
         easing: Easing.bezier(0.5, 0, 0.75, 0),
         useNativeDriver: true,
       }),
       Animated.sequence([
-        Animated.delay(ANIMATION_TIME / 6),
+        Animated.delay(variables.ANIMATION_TIME / 6),
         Animated.timing(indicatorWidth, {
           toValue: 1.5,
-          duration: ANIMATION_TIME / 2,
+          duration: variables.ANIMATION_TIME / 2,
           useNativeDriver: true,
         }),
         Animated.timing(indicatorWidth, {
           toValue: 1,
-          duration: ANIMATION_TIME / 2,
+          duration: variables.ANIMATION_TIME / 2,
           useNativeDriver: true,
         })
       ]),
@@ -39,7 +39,7 @@ const Pagination4 = ({ activePage, pages }) => {
   }
 
   const getOffset = () => {
-    return ((activePage * 2 + 1) * (containerWidth / 2)) - (DOT_SIZE / 2);
+    return ((activePage * 2 + 1) * (containerWidth / 2)) - (variables.DOT_SIZE / 2);
   }
 
   return (
@@ -65,9 +65,9 @@ const styles = StyleSheet.create({
   },
   indicator: {
     position: 'absolute',
-    height: DOT_SIZE,
-    width: DOT_SIZE,
-    borderRadius: DOT_SIZE / 2,
+    height: variables.DOT_SIZE,
+    width: variables.DOT_SIZE,
+    borderRadius: variables.DOT_SIZE / 2,
     backgroundColor: '#de7200',
   },
   dotsContainer: {

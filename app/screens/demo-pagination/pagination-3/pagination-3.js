@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import { View, Animated, StyleSheet, Easing } from 'react-native';
 import MaskedView from '@react-native-community/masked-view';
 
-import { DOT_SIZE, ANIMATION_TIME } from '../index';
+import { variables } from '../variables';
 
 import Dot3 from './dot-3';
 
@@ -17,14 +17,14 @@ const Pagination3 = ({ activePage, pages }) => {
   const animateIndicator = () => {
     Animated.timing(leftOffset, {
       toValue: getOffset(),
-      duration: ANIMATION_TIME,
+      duration: variables.ANIMATION_TIME,
       Easing: Easing.bezier(.32,-0.16,.41,.17),
       useNativeDriver: true,
     }).start();
   }
 
   const getOffset = () => {
-    return ((activePage * 2 + 1) * (containerWidth / 2)) - (DOT_SIZE / 2);
+    return ((activePage * 2 + 1) * (containerWidth / 2)) - (variables.DOT_SIZE / 2);
   }
 
   return (
@@ -54,14 +54,14 @@ const styles = StyleSheet.create({
   },
   indicator: {
     position: 'absolute',
-    height: DOT_SIZE,
-    width: DOT_SIZE,
-    borderRadius: DOT_SIZE / 2,
+    height: variables.DOT_SIZE,
+    width: variables.DOT_SIZE,
+    borderRadius: variables.DOT_SIZE / 2,
     backgroundColor: '#de7200',
   },
   maskedView: {
     width: '100%',
-    height: DOT_SIZE,
+    height: variables.DOT_SIZE,
     backgroundColor: '#bfbfbf',
   },
   maskedContainer: {

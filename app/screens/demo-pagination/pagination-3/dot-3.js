@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 
-import { DOT_SIZE } from '../index';
+import { variables } from '../variables';
 
 const Dot3 = () => {
   return (
@@ -11,9 +11,9 @@ const Dot3 = () => {
 
 const styles = StyleSheet.create({
   container: {
-    height: DOT_SIZE,
-    width: DOT_SIZE,
-    borderRadius: DOT_SIZE / 2,
+    height: variables.DOT_SIZE,
+    width: variables.DOT_SIZE,
+    borderRadius: variables.DOT_SIZE / 2,
     backgroundColor: '#bfbfbf',
   },
 });
