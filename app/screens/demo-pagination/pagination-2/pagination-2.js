@@ -1,9 +1,9 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { View, Animated, StyleSheet, Easing } from 'react-native';
 
-import Dot2 from './dot-2';
+import { DOT_SIZE, ANIMATION_TIME } from '../index';
 
-const INDICATOR_SIZE = 32;
+import Dot2 from './dot-2';
 
 const Pagination2 = ({ activePage, pages }) => {
   const leftOffset = useRef(new Animated.Value(0)).current;
@@ -16,14 +16,14 @@ const Pagination2 = ({ activePage, pages }) => {
   const animateIndicator = () => {
     Animated.timing(leftOffset, {
       toValue: getOffset(),
-      duration: 250,
+      duration: ANIMATION_TIME,
       Easing: Easing.bezier(.32,-0.16,.41,.17),
       useNativeDriver: true,
     }).start();
   }
 
   const getOffset = () => {
-    return ((activePage * 2 + 1) * (containerWidth / 2)) - (INDICATOR_SIZE / 2);
+    return ((activePage * 2 + 1) * (containerWidth / 2)) - (DOT_SIZE / 2);
   }
 
   return (
@@ -49,9 +49,9 @@ const styles = StyleSheet.create({
   },
   indicator: {
     position: 'absolute',
-    height: INDICATOR_SIZE,
-    width: INDICATOR_SIZE,
-    borderRadius: INDICATOR_SIZE / 2,
+    height: DOT_SIZE,
+    width: DOT_SIZE,
+    borderRadius: DOT_SIZE / 2,
     backgroundColor: '#de7200',
   },
   dotsContainer: {

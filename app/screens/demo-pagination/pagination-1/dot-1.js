@@ -1,13 +1,15 @@
 import React, { useEffect, useRef } from 'react';
 import { Animated, Easing, StyleSheet } from 'react-native';
 
+import { DOT_SIZE, ANIMATION_TIME } from '../index';
+
 const Dot1 = ({ active }) => {
   const dotSize = useRef(new Animated.Value(16)).current;
 
   useEffect(() => {
     Animated.timing(dotSize, {
-      toValue: active ? 2 : 1,
-      duration: 250,
+      toValue: active ? 1 : .5,
+      duration: ANIMATION_TIME,
       Easing: Easing.bezier(.32,-0.16,.41,.17),
       useNativeDriver: true,
     }).start();
@@ -20,9 +22,9 @@ const Dot1 = ({ active }) => {
 
 const styles = StyleSheet.create({
   dot: {
-    height: 16,
-    width: 16,
-    borderRadius: 13,
+    height: DOT_SIZE,
+    width: DOT_SIZE,
+    borderRadius: DOT_SIZE / 2,
     backgroundColor: '#bfbfbf',
   },
   activeDot: {

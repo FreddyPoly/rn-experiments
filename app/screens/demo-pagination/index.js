@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-import Pagination1 from './components/pagination-1';
+import Pagination1 from './pagination-1/pagination-1';
 import Pagination2 from './pagination-2/pagination-2';
 import Pagination3 from './pagination-3/pagination-3';
 import Pagination4 from './pagination-4/pagination-4';

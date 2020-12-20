@@ -1,6 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import { Animated, StyleSheet, Easing } from 'react-native';
 
+import { DOT_SIZE } from '../index';
+
 const Dot2 = ({ active }) => {
   const dotSize = useRef(new Animated.Value(16)).current;
 
@@ -20,9 +22,9 @@ const Dot2 = ({ active }) => {
 
 const styles = StyleSheet.create({
   dot: {
-    height: 16,
-    width: 16,
-    borderRadius: 13,
+    height: DOT_SIZE,
+    width: DOT_SIZE,
+    borderRadius: DOT_SIZE / 2,
     backgroundColor: '#bfbfbf',
   },
 });

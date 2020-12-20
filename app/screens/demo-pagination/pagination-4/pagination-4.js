@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { View, Animated, StyleSheet, Easing, Text } from 'react-native';
+import { View, Animated, StyleSheet, Easing } from 'react-native';
 
 import { DOT_SIZE, ANIMATION_TIME } from '../index';
 

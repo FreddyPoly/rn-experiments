@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 
-const DOT_SIZE = 32;
+import { DOT_SIZE } from '../index';
 
 const Dot3 = () => {
   return (
