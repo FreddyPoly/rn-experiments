@@ -6,6 +6,7 @@ import Pagination1 from './pagination-1/pagination-1';
 import Pagination2 from './pagination-2/pagination-2';
 import Pagination3 from './pagination-3/pagination-3';
 import Pagination4 from './pagination-4/pagination-4';
+import Pagination5 from './pagination-5/pagination-5';
 
 export const DOT_SIZE = 25;
 export const ANIMATION_TIME = 500;
@@ -60,6 +61,10 @@ const DemoPagination = () => {
 
       <View style={styles.paginationsContainer}>
         <Pagination4 activePage={activePage} pages={pages} />
+      </View>
+
+      <View style={styles.paginationsContainer}>
+        <Pagination5 activePage={activePage} pages={pages} />
       </View>
     </View>
   );
