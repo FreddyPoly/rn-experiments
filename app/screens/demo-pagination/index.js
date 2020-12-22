@@ -8,9 +8,6 @@ import Pagination3 from './pagination-3/pagination-3';
 import Pagination4 from './pagination-4/pagination-4';
 import Pagination5 from './pagination-5/pagination-5';
 
-export const DOT_SIZE = 25;
-export const ANIMATION_TIME = 500;
-
 const DemoPagination = () => {
   const [activePage, setActivePage] = useState(2);
   const pages = Array.from(Array(5).keys());
@@ -29,7 +26,7 @@ const DemoPagination = () => {
 
   return (
     <View style={styles.container}>
-      <Text>Page {activePage + 1}</Text>
+      <View style={[styles.background, { backgroundColor: '#023047' }]} />
 
       <View style={styles.buttonsContainer}>
         <TouchableOpacity
@@ -94,6 +91,13 @@ const styles = StyleSheet.create({
   paginationsContainer: {
     paddingTop: '12%',
     paddingHorizontal: '10%',
+  },
+  background: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
   },
 });
 

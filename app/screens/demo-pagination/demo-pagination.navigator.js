@@ -8,7 +8,13 @@ const Stack = createStackNavigator();
 export default function DemoPaginationNavigator() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="DemoPagination" component={DemoPagination} />
+      <Stack.Screen
+        name="DemoPagination"
+        options={{
+          headerShown: false,
+        }}
+        component={DemoPagination}
+      />
     </Stack.Navigator>
   );
 }

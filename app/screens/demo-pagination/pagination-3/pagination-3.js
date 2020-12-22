@@ -57,12 +57,12 @@ const styles = StyleSheet.create({
     height: variables.DOT_SIZE,
     width: variables.DOT_SIZE,
     borderRadius: variables.DOT_SIZE / 2,
-    backgroundColor: '#de7200',
+    backgroundColor: variables.COLOR_ACTIVE,
   },
   maskedView: {
     width: '100%',
     height: variables.DOT_SIZE,
-    backgroundColor: '#bfbfbf',
+    backgroundColor: variables.COLOR_INACTIVE,
   },
   maskedContainer: {
     flex: 1,
