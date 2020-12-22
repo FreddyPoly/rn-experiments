@@ -7,21 +7,60 @@ import Dot5 from './dot-5';
 
 const Pagination5 = ({ activePage, pages }) => {
   const leftOffset = useRef(new Animated.Value(0)).current;
-  const indicatorWidth = useRef(new Animated.Value(1)).current;
+  const indicatorWidth = useRef(new Animated.Value(variables.DOT_SIZE)).current;
   const [containerWidth, setContainerWidth] = useState(0);
+  const [lastPage, setLastPage] = useState(null);
 
   useEffect(() => {
-    animateIndicator();
+    if (activePage > lastPage) {
+      next();
+    } else {
+      previous();
+    }
+
+    setLastPage(activePage);
   }, [containerWidth, activePage]);
 
-  const animateIndicator = () => {
-    Animated.parallel([
-      Animated.sequence([
+  const previous = () => {
+    Animated.sequence([
+      Animated.parallel([
         Animated.timing(indicatorWidth, {
-          toValue: 50,
+          toValue: variables.DOT_SIZE + containerWidth,
           duration: variables.ANIMATION_TIME / 2,
           useNativeDriver: false,
-        })
+        }),
+        Animated.timing(leftOffset, {
+          toValue: getOffset(),
+          duration: variables.ANIMATION_TIME / 2,
+          useNativeDriver: false,
+        }),
+      ]),
+      Animated.timing(indicatorWidth, {
+        toValue: variables.DOT_SIZE,
+        duration: variables.ANIMATION_TIME / 2,
+        useNativeDriver: false,
+      }),
+    ]).start();
+  };
+
+  const next = () => {
+    Animated.sequence([
+      Animated.timing(indicatorWidth, {
+        toValue: variables.DOT_SIZE + containerWidth,
+        duration: variables.ANIMATION_TIME / 2,
+        useNativeDriver: false,
+      }),
+      Animated.parallel([
+        Animated.timing(indicatorWidth, {
+          toValue: variables.DOT_SIZE,
+          duration: variables.ANIMATION_TIME / 2,
+          useNativeDriver: false,
+        }),
+        Animated.timing(leftOffset, {
+          toValue: getOffset(),
+          duration: variables.ANIMATION_TIME / 2,
+          useNativeDriver: false,
+        }),
       ]),
     ]).start();
   }
@@ -40,7 +79,7 @@ const Pagination5 = ({ activePage, pages }) => {
         ))}
       </View>
       
-      <Animated.View style={[styles.indicator, { width: indicatorWidth }]} />
+      <Animated.View style={[styles.indicator, { transform: [{ translateX: leftOffset }], width: indicatorWidth }]} />
     </View>
   );
 };
