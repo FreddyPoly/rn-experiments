@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import React, { useState, useRef } from 'react';
+import { View, Text, StyleSheet, Animated, TouchableOpacity, Dimensions } from 'react-native';
 
 import Pagination1 from './pagination-1/pagination-1';
 import Pagination2 from './pagination-2/pagination-2';
@@ -8,12 +7,23 @@ import Pagination3 from './pagination-3/pagination-3';
 import Pagination4 from './pagination-4/pagination-4';
 import Pagination5 from './pagination-5/pagination-5';
 
+import { variables } from './variables';
+
+const { width, height } = Dimensions.get('window');
+
 const DemoPagination = () => {
-  const [activePage, setActivePage] = useState(2);
+  const offset = useRef(new Animated.Value(0)).current;
+  const [activePage, setActivePage] = useState(0);
   const pages = Array.from(Array(5).keys());
 
   const nextPage = () => {
     if (activePage >= pages.length - 1) return;
+
+    Animated.timing(offset, {
+      toValue: -(activePage + 1) * width,
+      duration: variables.ANIMATION_TIME,
+      useNativeDriver: true,
+    }).start();
 
     setActivePage((previous) => previous + 1);
   }
@@ -21,28 +31,42 @@ const DemoPagination = () => {
   const previousPage = () => {
     if (activePage <= 0) return;
 
+    Animated.timing(offset, {
+      toValue: -(activePage - 1) * width,
+      duration: variables.ANIMATION_TIME,
+      useNativeDriver: true,
+    }).start();
+
     setActivePage((previous) => previous - 1);
   }
 
   return (
     <View style={styles.container}>
-      <View style={[styles.background, { backgroundColor: '#023047' }]} />
+      <Animated.View style={[styles.background, { transform: [{ translateX: offset }] }]}>
+        <View style={{ width: width, height: height, backgroundColor: '#012638' }} />
 
-      <View style={styles.buttonsContainer}>
-        <TouchableOpacity
-          style={[styles.button, activePage <= 0 && styles.disabledButton]}
-          onPress={previousPage}
-          disabled={activePage <= 0}>
-          <Text style={styles.buttonLabel}>Previous</Text>
-        </TouchableOpacity>
+        <View style={{ width: width, height: height, backgroundColor: '#012b3f' }} />
 
-        <TouchableOpacity
-          style={[styles.button, activePage >= pages.length - 1 && styles.disabledButton]}
-          onPress={nextPage}
-          disabled={activePage >= pages.length - 1}>
-          <Text style={styles.buttonLabel}>Next</Text>
-        </TouchableOpacity>
-      </View>
+        <View style={{ width: width, height: height, backgroundColor: '#023047' }} />
+
+        <View style={{ width: width, height: height, backgroundColor: '#1b4459' }} />
+
+        <View style={{ width: width, height: height, backgroundColor: '#34596b' }} />
+      </Animated.View>
+
+      <TouchableOpacity
+        style={{ position: 'absolute', top: 5, left: 5 }}
+        onPress={previousPage}
+        disabled={activePage <= 0}>
+        <Text style={styles.buttonLabel}>Previous</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={{ position: 'absolute', top: 5, right: 5 }}
+        onPress={nextPage}
+        disabled={activePage >= pages.length - 1}>
+        <Text style={styles.buttonLabel}>Next</Text>
+      </TouchableOpacity>
 
       <View style={styles.paginationsContainer}>
         <Pagination1 activePage={activePage} pages={pages} />
@@ -70,29 +94,23 @@ const DemoPagination = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: 'space-around',
     padding: '5%',
-  },
-  buttonsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    paddingVertical: '10%',
   },
   button: {
-    paddingVertical: 12,
+    position: 'absolute',
     paddingHorizontal: 20,
     backgroundColor: '#de7200',
-  },
-  disabledButton: {
-    backgroundColor: '#bfbfbf',
   },
   buttonLabel: {
     color: 'white',
   },
   paginationsContainer: {
-    paddingTop: '12%',
     paddingHorizontal: '10%',
   },
   background: {
+    flexDirection: 'row',
     position: 'absolute',
     top: 0,
     right: 0,
