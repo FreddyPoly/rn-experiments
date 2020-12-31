@@ -1,7 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, Animated, TouchableOpacity, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Animated, TouchableOpacity, Dimensions, Image } from 'react-native';
 
-const { width, height } = Dimensions.get('window');
+import apple from '../../assets/demo-carousel-1/apple.png';
+import banana from '../../assets/demo-carousel-1/banana.png';
+import grape from '../../assets/demo-carousel-1/grape.png';
+import pineapple from '../../assets/demo-carousel-1/pineapple.png';
+import strawberry from '../../assets/demo-carousel-1/strawberry.png';
+
+const { width } = Dimensions.get('window');
 
 const HEIGHT = 200;
 const WIDTH = width;
@@ -9,22 +15,27 @@ const elements = [
   {
     color: '#012638',
     title: 'Titre 1',
+    image: apple,
   },
   {
     color: '#012b3f',
     title: 'Titre 2',
+    image: banana,
   },
   {
     color: '#023047',
     title: 'Titre 3',
+    image: grape,
   },
   {
     color: '#1b4459',
     title: 'Titre 4',
+    image: pineapple,
   },
   {
     color: '#34596b',
     title: 'Titre 5',
+    image: strawberry,
   },
 ];
 
@@ -88,7 +99,9 @@ const DemoCarousel1 = () => {
       <View style={{ height: HEIGHT, width: WIDTH }}>
         <Animated.View style={[styles.background, { transform: [{ translateX: offset }] }]}>
           {elements.map((element) => (
-            <View key={element.color} style={{ width: WIDTH, height: HEIGHT, backgroundColor: element.color }} />
+            <View key={element.color} style={{ width: WIDTH, height: HEIGHT, backgroundColor: element.color }}>
+              <Image style={{ height: 50, width: 50 }} source={element.image} />
+            </View>
           ))}
         </Animated.View>
       </View>
