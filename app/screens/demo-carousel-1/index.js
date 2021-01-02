@@ -9,32 +9,31 @@ import strawberry from '../../assets/demo-carousel-1/strawberry.png';
 
 const { width } = Dimensions.get('window');
 
-const HEIGHT = 200;
 const WIDTH = width;
 const elements = [
   {
-    color: '#012638',
-    title: 'Titre 1',
+    title: 'Apple',
+    subtitle: 'Lorem ipsum',
     image: apple,
   },
   {
-    color: '#012b3f',
-    title: 'Titre 2',
+    title: 'Banana',
+    subtitle: 'Lorem ipsum',
     image: banana,
   },
   {
-    color: '#023047',
-    title: 'Titre 3',
+    title: 'Grape',
+    subtitle: 'Lorem ipsum',
     image: grape,
   },
   {
-    color: '#1b4459',
-    title: 'Titre 4',
+    title: 'Pineapple',
+    subtitle: 'Lorem ipsum',
     image: pineapple,
   },
   {
-    color: '#34596b',
-    title: 'Titre 5',
+    title: 'Strawberry',
+    subtitle: 'Lorem ipsum',
     image: strawberry,
   },
 ];
@@ -45,6 +44,7 @@ const DemoCarousel1 = () => {
   const pages = Array.from(Array(5).keys());
   const titleOffset = useRef(new Animated.Value(0)).current;
   const [title, setTitle] = useState(elements[0].title);
+  const [subtitle, setSubtitle] = useState(elements[0].subtitle);
 
   useEffect(() => {
     updateText();
@@ -58,7 +58,7 @@ const DemoCarousel1 = () => {
     Animated.timing(offset, {
       toValue: -newPage * width,
       duration: 250,
-      useNativeDriver: true,
+      useNativeDriver: false,
     }).start();
 
     setActivePage(newPage);
@@ -72,7 +72,7 @@ const DemoCarousel1 = () => {
     Animated.timing(offset, {
       toValue: -newPage * width,
       duration: 250,
-      useNativeDriver: true,
+      useNativeDriver: false,
     }).start();
 
     setActivePage(newPage);
@@ -80,11 +80,12 @@ const DemoCarousel1 = () => {
 
   const updateText = () => {
     Animated.timing(titleOffset, {
-      toValue: 20,
+      toValue: 30,
       duration: 250,
       useNativeDriver: true,
     }).start(() => {
       setTitle(elements[activePage].title);
+      setSubtitle(elements[activePage].subtitle);
 
       Animated.timing(titleOffset, {
         toValue: 0,
@@ -94,16 +95,33 @@ const DemoCarousel1 = () => {
     });
   }
 
+  const color = offset.interpolate({
+    inputRange: [-4 * width, -3 * width, -2 * width, -width, 0],
+    outputRange: ['#012638', '#012b3f', '#023047', '#1b4459', '#34596b']
+  });
+
   return (
     <View style={styles.container}>
-      <View style={{ height: HEIGHT, width: WIDTH }}>
+      <Animated.View style={[styles.absoluteBackground, { backgroundColor: color }]} />
+
+      <View style={{ flex: 2, justifyContent: 'center', alignItems: 'center', width: WIDTH }}>
         <Animated.View style={[styles.background, { transform: [{ translateX: offset }] }]}>
-          {elements.map((element) => (
-            <View key={element.color} style={{ width: WIDTH, height: HEIGHT, backgroundColor: element.color }}>
-              <Image style={{ height: 50, width: 50 }} source={element.image} />
+          {elements.map((element, index) => (
+            <View key={index} style={styles.contentContainer}>
+              <Image style={{ height: width * 0.45, width: width * 0.45, resizeMode: 'contain' }} source={element.image} />
             </View>
           ))}
         </Animated.View>
+      </View>
+
+      <View style={{ flex: 1, width: WIDTH, paddingHorizontal: width * 0.05 }}>
+        <View style={{ overflow: 'hidden' }}>
+          <Animated.Text style={{ fontSize: 24, transform: [{ translateY : titleOffset }] }}>{title}</Animated.Text>
+        </View>
+        
+        <View style={{ overflow: 'hidden' }}>
+          <Animated.Text style={{ transform: [{ translateY : titleOffset }] }}>{subtitle}</Animated.Text>
+        </View>
       </View>
 
       <TouchableOpacity
@@ -119,10 +137,6 @@ const DemoCarousel1 = () => {
         disabled={activePage >= pages.length - 1}>
         <Text style={styles.buttonLabel}>Next</Text>
       </TouchableOpacity>
-
-      <View style={{ backgroundColor: 'red', overflow: 'hidden' }}>
-        <Animated.Text style={{ backgroundColor: 'gold', transform: [{ translateY : titleOffset }] }}>{title}</Animated.Text>
-      </View>
     </View>
   );
 };
@@ -130,12 +144,23 @@ const DemoCarousel1 = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     alignItems: 'center',
+  },
+  absoluteBackground: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
   },
   background: {
     flexDirection: 'row',
-    height: HEIGHT,
+    width: WIDTH,
+  },
+  contentContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
     width: WIDTH,
   },
 });
