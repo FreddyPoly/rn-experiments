@@ -144,10 +144,11 @@ const DemoCarousel1 = () => {
   return (
     <View style={styles.container}>
       <Animated.View style={[styles.absoluteBackground, { backgroundColor: 'white' }]} />
+        <View style={{ position: 'absolute', top: 7, bottom: 0, width: '100%', justifyContent: 'flex-start', alignItems: 'center' }}>
+          <Animated.Text style={{ textAlign: 'center', fontSize: width * 0.8, lineHeight: width, color: 'rgba(88, 88, 88, .2)', opacity: backgroundTextOpacity, fontFamily: 'PlayfairDisplay-Bold' }}>{backgroundText}</Animated.Text>
+        </View>
 
       <View style={{ flex: 2, justifyContent: 'center', alignItems: 'center', width: WIDTH }}>
-        <Animated.Text style={{ position: 'absolute', fontSize: width * 1, color: 'rgba(37, 37, 37, .3)', opacity: backgroundTextOpacity }}>{backgroundText}</Animated.Text>
-
         <Animated.View style={[styles.background, { transform: [{ translateX: offset }] }]}>
           {elements.map((element, index) => (
             <View key={index} style={styles.contentContainer}>
