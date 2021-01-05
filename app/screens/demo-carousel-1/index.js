@@ -1,65 +1,97 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, Animated, TouchableOpacity, Dimensions, Image } from 'react-native';
 
-import apple from '../../assets/demo-carousel-1/apple.png';
-import banana from '../../assets/demo-carousel-1/banana.png';
-import grape from '../../assets/demo-carousel-1/grape.png';
-import pineapple from '../../assets/demo-carousel-1/pineapple.png';
-import strawberry from '../../assets/demo-carousel-1/strawberry.png';
+import episode1 from '../../assets/demo-carousel-1/episode-1.jpg';
+import episode2 from '../../assets/demo-carousel-1/episode-2.png';
+import episode3 from '../../assets/demo-carousel-1/episode-3.jpg';
+import episode4 from '../../assets/demo-carousel-1/episode-4.jpg';
+import episode5 from '../../assets/demo-carousel-1/episode-5.jpg';
+import episode6 from '../../assets/demo-carousel-1/episode-6.jpg';
 
 const { width } = Dimensions.get('window');
 
+const ANIM_TIME = 450;
 const WIDTH = width;
 const elements = [
   {
-    title: 'Apple',
+    title: 'Episode 1',
     subtitle: 'Lorem ipsum',
-    image: apple,
+    image: episode1,
+    backgroundText: 'I',
   },
   {
-    title: 'Banana',
+    title: 'Episode 2',
     subtitle: 'Lorem ipsum',
-    image: banana,
+    image: episode2,
+    backgroundText: 'II',
   },
   {
-    title: 'Grape',
+    title: 'Episode 3',
     subtitle: 'Lorem ipsum',
-    image: grape,
+    image: episode3,
+    backgroundText: 'III',
   },
   {
-    title: 'Pineapple',
+    title: 'Episode 4',
     subtitle: 'Lorem ipsum',
-    image: pineapple,
+    image: episode4,
+    backgroundText: 'IV',
   },
   {
-    title: 'Strawberry',
+    title: 'Episode 5',
     subtitle: 'Lorem ipsum',
-    image: strawberry,
+    image: episode5,
+    backgroundText: 'V',
+  },
+  {
+    title: 'Episode 6',
+    subtitle: 'Lorem ipsum',
+    image: episode6,
+    backgroundText: 'VI',
   },
 ];
 
 const DemoCarousel1 = () => {
   const offset = useRef(new Animated.Value(0)).current;
   const [activePage, setActivePage] = useState(0);
-  const pages = Array.from(Array(5).keys());
+  const pages = Array.from(Array(elements.length).keys());
   const titleOffset = useRef(new Animated.Value(0)).current;
   const [title, setTitle] = useState(elements[0].title);
   const [subtitle, setSubtitle] = useState(elements[0].subtitle);
+  const backgroundTextOpacity = useRef(new Animated.Value(1)).current;
+  const [backgroundText, setBackgroundText] = useState(elements[0].backgroundText);
 
   useEffect(() => {
     updateText();
   }, [activePage]);
+  
+  useEffect(() => {
+    Animated.timing(backgroundTextOpacity, {
+      toValue: 1,
+      duration: ANIM_TIME / 2,
+      useNativeDriver: false,
+    }).start();
+  }, [backgroundText]);
 
   const nextPage = async () => {
     if (activePage >= pages.length - 1) return;
 
     const newPage = activePage + 1;
 
-    Animated.timing(offset, {
-      toValue: -newPage * width,
-      duration: 250,
-      useNativeDriver: false,
-    }).start();
+    Animated.parallel([
+      Animated.timing(offset, {
+        toValue: -newPage * width,
+        duration: ANIM_TIME,
+        useNativeDriver: false,
+      }),
+      Animated.timing(backgroundTextOpacity, {
+        toValue: 0,
+        duration: ANIM_TIME / 2,
+        useNativeDriver: false,
+      })
+    ]).start(() => {
+      setBackgroundText(elements[newPage].backgroundText);
+    });
 
     setActivePage(newPage);
   }
@@ -69,11 +101,20 @@ const DemoCarousel1 = () => {
 
     const newPage = activePage - 1;
 
-    Animated.timing(offset, {
-      toValue: -newPage * width,
-      duration: 250,
-      useNativeDriver: false,
-    }).start();
+    Animated.parallel([
+      Animated.timing(offset, {
+        toValue: -newPage * width,
+        duration: ANIM_TIME,
+        useNativeDriver: false,
+      }),
+      Animated.timing(backgroundTextOpacity, {
+        toValue: 0,
+        duration: ANIM_TIME / 2,
+        useNativeDriver: false,
+      })
+    ]).start(() => {
+      setBackgroundText(elements[newPage].backgroundText);
+    });
 
     setActivePage(newPage);
   }
@@ -81,7 +122,7 @@ const DemoCarousel1 = () => {
   const updateText = () => {
     Animated.timing(titleOffset, {
       toValue: 30,
-      duration: 250,
+      duration: ANIM_TIME,
       useNativeDriver: true,
     }).start(() => {
       setTitle(elements[activePage].title);
@@ -89,22 +130,24 @@ const DemoCarousel1 = () => {
 
       Animated.timing(titleOffset, {
         toValue: 0,
-        duration: 250,
+        duration: ANIM_TIME,
         useNativeDriver: true,
       }).start();
     });
   }
 
   const color = offset.interpolate({
-    inputRange: [-4 * width, -3 * width, -2 * width, -width, 0],
-    outputRange: ['#012638', '#012b3f', '#023047', '#1b4459', '#34596b']
+    inputRange: [-5 * width, -4 * width, -3 * width, -2 * width, -width, 0],
+    outputRange: ['#cb997e', '#e76f51', '#f4a261', '#e9c46a', '#2a9d8f', '#264653']
   });
 
   return (
     <View style={styles.container}>
-      <Animated.View style={[styles.absoluteBackground, { backgroundColor: color }]} />
+      <Animated.View style={[styles.absoluteBackground, { backgroundColor: 'white' }]} />
 
       <View style={{ flex: 2, justifyContent: 'center', alignItems: 'center', width: WIDTH }}>
+        <Animated.Text style={{ position: 'absolute', fontSize: width * 1, color: 'rgba(37, 37, 37, .3)', opacity: backgroundTextOpacity }}>{backgroundText}</Animated.Text>
+
         <Animated.View style={[styles.background, { transform: [{ translateX: offset }] }]}>
           {elements.map((element, index) => (
             <View key={index} style={styles.contentContainer}>
