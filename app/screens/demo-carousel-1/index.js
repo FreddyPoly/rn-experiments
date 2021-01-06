@@ -8,44 +8,40 @@ import episode4 from '../../assets/demo-carousel-1/episode-4.jpg';
 import episode5 from '../../assets/demo-carousel-1/episode-5.jpg';
 import episode6 from '../../assets/demo-carousel-1/episode-6.jpg';
 
-const { width } = Dimensions.get('window');
+import grain from '../../assets/demo-carousel-1/white-wall.jpg';
+
+const { height, width } = Dimensions.get('window');
 
 const ANIM_TIME = 450;
 const WIDTH = width;
 const elements = [
   {
     title: 'Episode 1',
-    subtitle: 'Lorem ipsum',
     image: episode1,
     backgroundText: 'I',
   },
   {
     title: 'Episode 2',
-    subtitle: 'Lorem ipsum',
     image: episode2,
     backgroundText: 'II',
   },
   {
     title: 'Episode 3',
-    subtitle: 'Lorem ipsum',
     image: episode3,
     backgroundText: 'III',
   },
   {
     title: 'Episode 4',
-    subtitle: 'Lorem ipsum',
     image: episode4,
     backgroundText: 'IV',
   },
   {
     title: 'Episode 5',
-    subtitle: 'Lorem ipsum',
     image: episode5,
     backgroundText: 'V',
   },
   {
     title: 'Episode 6',
-    subtitle: 'Lorem ipsum',
     image: episode6,
     backgroundText: 'VI',
   },
@@ -57,7 +53,6 @@ const DemoCarousel1 = () => {
   const pages = Array.from(Array(elements.length).keys());
   const titleOffset = useRef(new Animated.Value(0)).current;
   const [title, setTitle] = useState(elements[0].title);
-  const [subtitle, setSubtitle] = useState(elements[0].subtitle);
   const backgroundTextOpacity = useRef(new Animated.Value(1)).current;
   const [backgroundText, setBackgroundText] = useState(elements[0].backgroundText);
 
@@ -121,12 +116,11 @@ const DemoCarousel1 = () => {
 
   const updateText = () => {
     Animated.timing(titleOffset, {
-      toValue: 30,
+      toValue: 60,
       duration: ANIM_TIME,
       useNativeDriver: true,
     }).start(() => {
       setTitle(elements[activePage].title);
-      setSubtitle(elements[activePage].subtitle);
 
       Animated.timing(titleOffset, {
         toValue: 0,
@@ -136,14 +130,11 @@ const DemoCarousel1 = () => {
     });
   }
 
-  const color = offset.interpolate({
-    inputRange: [-5 * width, -4 * width, -3 * width, -2 * width, -width, 0],
-    outputRange: ['#cb997e', '#e76f51', '#f4a261', '#e9c46a', '#2a9d8f', '#264653']
-  });
-
   return (
     <View style={styles.container}>
-      <Animated.View style={[styles.absoluteBackground, { backgroundColor: 'white' }]} />
+      <Animated.View style={[styles.absoluteBackground, { backgroundColor: '#fffef3' }]} />
+      <Image style={{ position: 'absolute', height: height, width: width, resizeMode: 'cover', opacity: .15 }} source={grain} />
+
         <View style={{ position: 'absolute', top: 7, bottom: 0, width: '100%', justifyContent: 'flex-start', alignItems: 'center' }}>
           <Animated.Text style={{ textAlign: 'center', fontSize: width * 0.8, lineHeight: width, color: 'rgba(88, 88, 88, .2)', opacity: backgroundTextOpacity, fontFamily: 'PlayfairDisplay-Bold' }}>{backgroundText}</Animated.Text>
         </View>
@@ -160,11 +151,7 @@ const DemoCarousel1 = () => {
 
       <View style={{ flex: 1, width: WIDTH, paddingHorizontal: width * 0.05 }}>
         <View style={{ overflow: 'hidden' }}>
-          <Animated.Text style={{ fontSize: 24, transform: [{ translateY : titleOffset }] }}>{title}</Animated.Text>
-        </View>
-        
-        <View style={{ overflow: 'hidden' }}>
-          <Animated.Text style={{ transform: [{ translateY : titleOffset }] }}>{subtitle}</Animated.Text>
+          <Animated.Text style={{ fontSize: 48, transform: [{ translateY : titleOffset }],  fontFamily: 'PlayfairDisplay-Bold', textTransform: 'uppercase', color: '#262626' }}>{title}</Animated.Text>
         </View>
       </View>
 
