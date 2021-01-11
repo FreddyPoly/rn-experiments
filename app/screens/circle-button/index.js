@@ -1,37 +1,52 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, Animated, TouchableOpacity, Dimensions, Image } from 'react-native';
-import { RotationGestureHandler, PanGestureHandler } from 'react-native-gesture-handler';
+import { View, Text, StyleSheet, Animated, TouchableOpacity, Dimensions, Image, PanResponder } from 'react-native';
+import { PanGestureHandler } from 'react-native-gesture-handler';
 
 const { height, width } = Dimensions.get('window');
+const SIZE = 200;
 
 const CircleButton = () => {
-  const circleRotation = useRef(new Animated.Value(0)).current;
-
-  const cRotation = circleRotation.interpolate({
-    inputRange: [-100, 100],
-    outputRange: ['-100rad', '100rad'],
-  });
-
-  const _onRotateHandlerStateChange = (event) => {
-    console.log(`event : ${JSON.stringify(Object.keys(event))}`);
-    console.log(`event : ${JSON.stringify(event.nativeEvent)}`);
+  const midPoint = {
+    x: width / 2,
+    y: height / 2,
   };
+  const normalPoint = {
+    x: width,
+    y: height / 2,
+  };
+
+  const deg = useRef(new Animated.Value(0)).current;
+
+  const onPanGestureEvent = ({ nativeEvent }) => {
+    const a1 = Math.atan2(normalPoint.y - midPoint.y, normalPoint.x - midPoint.x);
+    const a2 = Math.atan2(nativeEvent.absoluteY - midPoint.y, nativeEvent.absoluteX - midPoint.x);
+
+    const theta = (a1 - a2) * 180 / Math.PI;
+    deg.setValue(theta);
+    console.log(`theta : ${theta}`);
+  };
+
+  const cRotation = deg.interpolate({
+    inputRange: [-180, 0, 180],
+    outputRange: ['180deg', '0deg', '-180deg'],
+  });
 
   return (
     <View style={styles.container}>
-      <RotationGestureHandler
-        onGestureEvent={Animated.event([{ nativeEvent: { rotation: circleRotation } }], { useNativeDriver: true })}
-        onHandlerStateChange={_onRotateHandlerStateChange}>
-        <Animated.View style={{ backgroundColor: 'green', width: 80, height: 80 }} />
-      </RotationGestureHandler>
-
-      <RotationGestureHandler
-        onGestureEvent={Animated.event([{ nativeEvent: { x: circleRotation } }], { useNativeDriver: true })}
-        onHandlerStateChange={_onRotateHandlerStateChange}>
-        <Animated.View style={[styles.circle, { transform: [{ rotate: cRotation }] }]}>
-          <View style={{ backgroundColor: 'yellow', width: 20, height: 20, borderRadius: 10, top: 35, left: 35 }} />
+      <PanGestureHandler
+        onGestureEvent={onPanGestureEvent}>
+        <Animated.View
+          style={{
+            position: 'absolute',
+            top: midPoint.y - SIZE / 2,
+            left: midPoint.x - SIZE / 2,
+            transform: [
+              { rotate: cRotation },
+            ]
+          }}>
+          <View style={styles.square} />
         </Animated.View>
-      </RotationGestureHandler>
+      </PanGestureHandler>
     </View>
   );
 };
@@ -44,9 +59,20 @@ const styles = StyleSheet.create({
   },
   circle: {
     backgroundColor: 'red',
-    height: 150,
-    width: 150,
-    borderRadius: 75,
+    height: SIZE,
+    width: SIZE,
+    borderRadius: SIZE / 2,
+  },
+  titleText: {
+    fontSize: 14,
+    lineHeight: 24,
+    fontWeight: "bold"
+  },
+  square: {
+    backgroundColor: 'blue',
+    height: SIZE,
+    width: SIZE,
+    borderRadius: 28,
   },
 });
 
