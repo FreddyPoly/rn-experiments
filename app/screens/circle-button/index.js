@@ -5,6 +5,10 @@ import { PanGestureHandler } from 'react-native-gesture-handler';
 const { height, width } = Dimensions.get('window');
 const SIZE = 80;
 const ANIM_TIME = 400;
+const NB_BUTTONS = 5;
+const startAngle = 270;
+const increm = 360 / NB_BUTTONS;
+const SIZE_BUTTONS = 10;
 
 const CircleButton = () => {
   const midPoint = {
@@ -15,7 +19,11 @@ const CircleButton = () => {
     x: width,
     y: height / 2,
   };
-
+  const origin = {
+    x: midPoint.x - SIZE / 2,
+    y: midPoint.y - SIZE / 2,
+  };
+  const [isOpen, setIsOpen] = useState(false);
   const buttonScale = useRef(new Animated.Value(1)).current;
   const deg = useRef(new Animated.Value(0)).current;
 
@@ -25,23 +33,31 @@ const CircleButton = () => {
 
     const theta = (a1 - a2) * 180 / Math.PI;
     deg.setValue(theta);
-    console.log(`theta : ${theta}`);
+  };
+
+  const trigger = () => {
+    const currentDeg = deg.__getValue();
+
+    Animated.parallel([
+      Animated.timing(deg, {
+        toValue: !isOpen ? currentDeg + 60 : currentDeg - 60,
+        duration: ANIM_TIME,
+        useNativeDriver: true,
+      }),
+      Animated.timing(buttonScale, {
+        toValue: !isOpen ? 4 : 1,
+        duration: ANIM_TIME,
+        useNativeDriver: true,
+      }),
+    ]).start(() => {
+      setIsOpen(!isOpen);
+    });
   };
 
   const cRotation = deg.interpolate({
     inputRange: [-180, 0, 180],
     outputRange: ['180deg', '0deg', '-180deg'],
   });
-
-  const trigger = () => {
-    console.log(`trigger`);
-    
-    Animated.timing(buttonScale, {
-      toValue: 3.5,
-      duration: ANIM_TIME,
-      useNativeDriver: true,
-    }).start();
-  };
 
   return (
     <View style={styles.container}>
@@ -50,8 +66,8 @@ const CircleButton = () => {
         <Animated.View
           style={{
             position: 'absolute',
-            top: midPoint.y - SIZE / 2,
-            left: midPoint.x - SIZE / 2,
+            top: origin.y,
+            left: origin.x,
             backgroundColor: 'blue',
             height: SIZE,
             width: SIZE,
@@ -61,15 +77,37 @@ const CircleButton = () => {
               { scaleX: buttonScale },
               { scaleY: buttonScale },
             ]
-          }} />
+          }}
+        >
+          {Array.from(Array(NB_BUTTONS).keys()).map((_, index) => {
+            const angle = startAngle + increm * index;
+            const rad = angle * Math.PI / 180;
+
+            return (
+              <TouchableOpacity
+                key={index}
+                style={{
+                  position: 'absolute',
+                  width: SIZE_BUTTONS,
+                  height: SIZE_BUTTONS,
+                  backgroundColor: 'green',
+                  borderRadius: 5,
+                  top: (SIZE / 2 - SIZE_BUTTONS / 2) + (SIZE / 2 - SIZE_BUTTONS / 2 * 2) * Math.sin(rad),
+                  left: (SIZE / 2 - SIZE_BUTTONS / 2) + (SIZE / 2 - SIZE_BUTTONS / 2 * 2) * Math.cos(rad),
+                }}
+              />
+            )
+          })}
+        </Animated.View>
       </PanGestureHandler>
 
       <TouchableOpacity
         onPress={trigger}
+        activeOpacity={1}
         style={{
           position: 'absolute',
-          bottom: 20,
-          left: 20,
+          top: origin.y,
+          left: origin.x,
         }}
       >
         <View
