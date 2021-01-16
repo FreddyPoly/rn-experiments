@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, Animated, TouchableOpacity, Dimensions, Image, PanResponder } from 'react-native';
+import { View, Text, StyleSheet, Animated, TouchableOpacity, Dimensions, Image, Easing } from 'react-native';
 import { PanGestureHandler } from 'react-native-gesture-handler';
 
 import cloud from '../../assets/circle-button/cloud.png';
@@ -9,13 +9,17 @@ import search from '../../assets/circle-button/search.png';
 import settings from '../../assets/circle-button/settings.png';
 const images = [cloud, home, insert, search, settings];
 
+import addWhite from '../../assets/circle-button/add_white.png';
+import minusWhite from '../../assets/circle-button/minus_white.png';
+
 const { height, width } = Dimensions.get('window');
 const SIZE = 80;
 const ANIM_TIME = 400;
 const NB_BUTTONS = 5;
-const startAngle = 270;
 const increm = 360 / NB_BUTTONS;
+const startAngle = 260;
 const SIZE_BUTTONS = 10;
+const primaryColor = '#001D4A';
 
 const CircleButton = () => {
   const midPoint = {
@@ -33,6 +37,7 @@ const CircleButton = () => {
   const [isOpen, setIsOpen] = useState(false);
   const buttonScale = useRef(new Animated.Value(1)).current;
   const deg = useRef(new Animated.Value(0)).current;
+  const iconAddScale = useRef(new Animated.Value(1)).current;
 
   const onPanGestureEvent = ({ nativeEvent }) => {
     const a1 = Math.atan2(normalPoint.y - midPoint.y, normalPoint.x - midPoint.x);
@@ -53,6 +58,11 @@ const CircleButton = () => {
       }),
       Animated.timing(buttonScale, {
         toValue: !isOpen ? 4 : 1,
+        duration: ANIM_TIME,
+        useNativeDriver: true,
+      }),
+      Animated.timing(iconAddScale, {
+        toValue: !isOpen ? 0 : 1,
         duration: ANIM_TIME,
         useNativeDriver: true,
       }),
@@ -80,7 +90,7 @@ const CircleButton = () => {
             position: 'absolute',
             top: origin.y,
             left: origin.x,
-            backgroundColor: 'blue',
+            backgroundColor: primaryColor,
             height: SIZE,
             width: SIZE,
             borderRadius: SIZE / 2,
@@ -133,12 +143,31 @@ const CircleButton = () => {
       >
         <View
           style={{
-            backgroundColor: 'yellow',
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: primaryColor,
             height: SIZE,
             width: SIZE,
             borderRadius: SIZE / 2,
           }}
-        />
+        >
+          <Animated.Image
+            source={addWhite}
+            style={{
+              width: SIZE / 2,
+              height: SIZE / 2,
+              transform: [
+                { scale: iconAddScale },
+              ],
+            }} />
+            <Animated.Image
+              source={minusWhite}
+              style={{
+                position: 'absolute',
+                width: SIZE / 2,
+                height: SIZE / 2,
+              }} />
+        </View>
       </TouchableOpacity>
     </View>
   );
