@@ -2,6 +2,13 @@ import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, Animated, TouchableOpacity, Dimensions, Image, PanResponder } from 'react-native';
 import { PanGestureHandler } from 'react-native-gesture-handler';
 
+import cloud from '../../assets/circle-button/cloud.png';
+import home from '../../assets/circle-button/home.png';
+import insert from '../../assets/circle-button/insert.png';
+import search from '../../assets/circle-button/search.png';
+import settings from '../../assets/circle-button/settings.png';
+const images = [cloud, home, insert, search, settings];
+
 const { height, width } = Dimensions.get('window');
 const SIZE = 80;
 const ANIM_TIME = 400;
@@ -59,6 +66,11 @@ const CircleButton = () => {
     outputRange: ['180deg', '0deg', '-180deg'],
   });
 
+  const imagesRotation = deg.interpolate({
+    inputRange: [-180, 0, 180],
+    outputRange: ['-180deg', '0deg', '180deg'],
+  });
+
   return (
     <View style={styles.container}>
       <PanGestureHandler
@@ -88,14 +100,23 @@ const CircleButton = () => {
                 key={index}
                 style={{
                   position: 'absolute',
-                  width: SIZE_BUTTONS,
-                  height: SIZE_BUTTONS,
-                  backgroundColor: 'green',
-                  borderRadius: 5,
+                  borderRadius: SIZE_BUTTONS / 2,
                   top: (SIZE / 2 - SIZE_BUTTONS / 2) + (SIZE / 2 - SIZE_BUTTONS / 2 * 2) * Math.sin(rad),
                   left: (SIZE / 2 - SIZE_BUTTONS / 2) + (SIZE / 2 - SIZE_BUTTONS / 2 * 2) * Math.cos(rad),
                 }}
-              />
+                hitSlop={{ top: 10, right: 10, bottom: 10, left: 10 }}
+              >
+                <Animated.Image
+                  source={images[index]}
+                  style={{
+                    width: SIZE_BUTTONS,
+                    height: SIZE_BUTTONS,
+                    resizeMode: 'contain',
+                    transform: [
+                      { rotate: imagesRotation },
+                    ],
+                  }} />
+              </TouchableOpacity>
             )
           })}
         </Animated.View>
