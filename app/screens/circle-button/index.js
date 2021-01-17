@@ -14,6 +14,7 @@ const NB_BUTTONS = 5;
 const increm = 360 / NB_BUTTONS;
 const startAngle = 260;
 const primaryColor = '#001D4A';
+const secondaryColor = 'white';
 
 const CircleButton = () => {
   const midPoint = {
@@ -84,7 +85,7 @@ const CircleButton = () => {
             position: 'absolute',
             top: origin.y,
             left: origin.x,
-            backgroundColor: primaryColor,
+            backgroundColor: 'rgba(0, 29, 74, .85)',
             height: SIZE,
             width: SIZE,
             borderRadius: SIZE / 2,
@@ -109,6 +110,22 @@ const CircleButton = () => {
           })}
         </Animated.View>
       </PanGestureHandler>
+
+      <Animated.View
+          style={{
+            position: 'absolute',
+            top: height / 2 - (SIZE / 4),
+            left: width / 2 - (SIZE / 4),
+            backgroundColor: secondaryColor,
+            height: SIZE / 2,
+            width: SIZE / 2,
+            borderRadius: SIZE / 4,
+            transform: [
+              { rotate: cRotation },
+              { scaleX: buttonScale },
+              { scaleY: buttonScale },
+            ]
+          }} />
 
       <TouchableOpacity
         onPress={trigger}
@@ -156,6 +173,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: secondaryColor,
   },
   circle: {
     backgroundColor: 'red',
