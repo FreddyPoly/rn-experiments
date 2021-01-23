@@ -14,7 +14,7 @@ const NB_BUTTONS = 5;
 const increm = 360 / NB_BUTTONS;
 const startAngle = 260;
 const primaryColor = '#001D4A';
-const secondaryColor = 'white';
+const secondaryColor = '#324a6e';
 
 const CircleButton = () => {
   const midPoint = {
