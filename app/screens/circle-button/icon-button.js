@@ -44,7 +44,7 @@ const IconButton = ({ index, rotation, rad }) => {
           { scale: scale },
         ],
       }}
-      hitSlop={{ top: 10, right: 10, bottom: 10, left: 10 }}
+      hitSlop={{ top: 3, right: 3, bottom: 3, left: 3 }}
       onPress={press}
     >
       <Animated.Image

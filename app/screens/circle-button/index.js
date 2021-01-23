@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, Animated, TouchableOpacity, Dimensions, Image, Easing } from 'react-native';
+import React, { useState, useRef } from 'react';
+import { View, StyleSheet, Animated, TouchableOpacity, Dimensions } from 'react-native';
 import { PanGestureHandler } from 'react-native-gesture-handler';
 
 import addWhite from '../../assets/circle-button/add_white.png';
@@ -21,25 +21,39 @@ const CircleButton = () => {
     x: width / 2,
     y: height / 2,
   };
-  const normalPoint = {
-    x: width,
-    y: height / 2,
-  };
   const origin = {
     x: midPoint.x - SIZE / 2,
     y: midPoint.y - SIZE / 2,
   };
+  const startGesturePoint = {
+    x: width,
+    y: height / 2,
+  };
+  let initAngle = null;
   const [isOpen, setIsOpen] = useState(false);
   const buttonScale = useRef(new Animated.Value(1)).current;
   const deg = useRef(new Animated.Value(0)).current;
   const iconAddScale = useRef(new Animated.Value(1)).current;
 
   const onPanGestureEvent = ({ nativeEvent }) => {
-    const a1 = Math.atan2(normalPoint.y - midPoint.y, normalPoint.x - midPoint.x);
+    const a1 = Math.atan2(startGesturePoint.y - midPoint.y, startGesturePoint.x - midPoint.x);
     const a2 = Math.atan2(nativeEvent.absoluteY - midPoint.y, nativeEvent.absoluteX - midPoint.x);
 
     const theta = (a1 - a2) * 180 / Math.PI;
-    deg.setValue(theta);
+
+    deg.setValue(theta + initAngle);
+  };
+
+  const onHandlerStateChange = (state) => {
+    if (state.nativeEvent.oldState === 0 || state.nativeEvent.oldState === 2) {
+      startGesturePoint.x = state.nativeEvent.absoluteX;
+      startGesturePoint.y = state.nativeEvent.absoluteY;
+
+      initAngle = deg.__getValue();
+    } else if (state.nativeEvent.state === 5) {
+      startGesturePoint.x = width;
+      startGesturePoint.y = height / 2;
+    }
   };
 
   const trigger = () => {
@@ -49,17 +63,17 @@ const CircleButton = () => {
       Animated.timing(deg, {
         toValue: !isOpen ? currentDeg + 60 : currentDeg - 60,
         duration: ANIM_TIME,
-        useNativeDriver: true,
+        useNativeDriver: false,
       }),
       Animated.timing(buttonScale, {
         toValue: !isOpen ? 4 : 1,
         duration: ANIM_TIME,
-        useNativeDriver: true,
+        useNativeDriver: false,
       }),
       Animated.timing(iconAddScale, {
         toValue: !isOpen ? 0 : 1,
         duration: ANIM_TIME,
-        useNativeDriver: true,
+        useNativeDriver: false,
       }),
     ]).start(() => {
       setIsOpen(!isOpen);
@@ -79,7 +93,8 @@ const CircleButton = () => {
   return (
     <View style={styles.container}>
       <PanGestureHandler
-        onGestureEvent={onPanGestureEvent}>
+        onGestureEvent={onPanGestureEvent}
+        onHandlerStateChange={onHandlerStateChange}>
         <Animated.View
           style={{
             position: 'absolute',
